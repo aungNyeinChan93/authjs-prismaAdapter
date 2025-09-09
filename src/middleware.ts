@@ -1,6 +1,5 @@
 import { NextAuthRequest } from "next-auth";
 import { NextRequest, NextResponse } from "next/server"
-import { getToken } from "next-auth/jwt";
 
 
 import { auth } from "@/lib/next-auth/auth"
@@ -21,14 +20,24 @@ import { getSession } from "./features/sessions/session-helper";
 // }
 
 const protectedRoutes = ['/private'];
+const adminRoutes = ['/admin', '/admin/dashboard']
 
 export default async function middleware(request: NextRequest) {
-    const isSession = !!(await getSession())
     const { pathname } = request.nextUrl
 
-    const isProtectedRoutes = protectedRoutes.some(route => pathname.startsWith(route))
+    const session = await getSession();
+    const role = session?.user?.role
+
+    const isSession = !!(await getSession());
+
+    const isProtectedRoutes = protectedRoutes.some(route => pathname.startsWith(route));
+    const isAdminRoutes = adminRoutes.some(route => pathname.startsWith(route));
 
     if (isProtectedRoutes && !isSession) {
+        return NextResponse.redirect(new URL('/api/auth/signin', request.nextUrl.origin))
+    }
+
+    if (isAdminRoutes && isSession && role !== 'admin') {
         return NextResponse.redirect(new URL('/api/auth/signin', request.nextUrl.origin))
     }
 

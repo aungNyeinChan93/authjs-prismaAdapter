@@ -49,6 +49,17 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
             }
             return token;
         },
+        signIn: async ({ account, user }) => {
+            if (account?.provider === 'github') {
+                const { id, email, image, name, role } = user;
+
+                return false
+            }
+            if (account?.provider === 'credentials') {
+                return true
+            }
+            return false;
+        }
     },
 
     // adapter: PrismaAdapter(prisma),
