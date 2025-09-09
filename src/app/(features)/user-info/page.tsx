@@ -15,9 +15,9 @@ const UserInfo = async () => {
       </main>
 
       {/* test useSession */}
-      <SessionProvider>
+      {/* <SessionProvider>
         <TestUseAuth />
-      </SessionProvider>
+      </SessionProvider> */}
     </React.Fragment>
   );
 };
