@@ -154,7 +154,8 @@ exports.Prisma.UserScalarFieldEnum = {
   email: 'email',
   emailVerified: 'emailVerified',
   image: 'image',
-  password: 'password'
+  password: 'password',
+  role: 'role'
 };
 
 exports.Prisma.SortOrder = {
@@ -171,7 +172,13 @@ exports.Prisma.NullsOrder = {
   first: 'first',
   last: 'last'
 };
-
+exports.Role = exports.$Enums.Role = {
+  guest: 'guest',
+  user: 'user',
+  admin: 'admin',
+  super: 'super',
+  owner: 'owner'
+};
 
 exports.Prisma.ModelName = {
   Session: 'Session',

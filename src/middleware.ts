@@ -1,5 +1,6 @@
 import { NextAuthRequest } from "next-auth";
 import { NextRequest, NextResponse } from "next/server"
+import { getToken } from "next-auth/jwt";
 
 
 import { auth } from "@/lib/next-auth/auth"
@@ -22,12 +23,12 @@ import { getSession } from "./features/sessions/session-helper";
 const protectedRoutes = ['/private'];
 
 export default async function middleware(request: NextRequest) {
-    const session = await getSession()
+    const isSession = !!(await getSession())
     const { pathname } = request.nextUrl
 
     const isProtectedRoutes = protectedRoutes.some(route => pathname.startsWith(route))
 
-    if (isProtectedRoutes && !session) {
+    if (isProtectedRoutes && !isSession) {
         return NextResponse.redirect(new URL('/api/auth/signin', request.nextUrl.origin))
     }
 
